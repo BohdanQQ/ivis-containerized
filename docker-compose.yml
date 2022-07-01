@@ -19,9 +19,7 @@ services:
 
   es:
     image: elasticsearch:6.8.23
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+  
   kibana:
     image: docker.elastic.co/kibana/kibana-oss:6.6.1
     container_name: kibana
@@ -37,7 +35,17 @@ services:
     restart: always
     build:
       context: ./
-      dockerfile: ./Dockerfile-centos
+      dockerfile: ./Dockerfile-dev-final
+    volumes:
+      # fine-grained volume mapping so as to not collide with built packages from the dockerfile build
+      - ./config/ivis:/opt/ivis-core/server/config:ro
+      - ./ivis-core/server/src:/opt/ivis-core/server/src
+      - ./ivis-core/server/routes:/opt/ivis-core/server/routes
+      - ./ivis-core/server/models:/opt/ivis-core/server/models
+      - ./ivis-core/server/services:/opt/ivis-core/server/services
+      - ./ivis-core/server/lib:/opt/ivis-core/server/lib
+      - ./ivis-core/server/index.js:/opt/ivis-core/server/index.js
+      - ./ivis-core/client/src:/opt/ivis-core/client/src
     depends_on:
       - db
       - es

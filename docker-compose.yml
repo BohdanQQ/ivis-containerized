@@ -13,8 +13,8 @@ services:
       - ./config/ivis-cert/ca.cert.pem:/opt/ca.cert.pem:ro
     ports:
        - "8443:443"
-       - "8444:444"
-       - "8445:445"
+       - "8446:8446"
+      #  - "8445:445"
     networks:
       ivis-net:
         aliases: 
@@ -66,6 +66,7 @@ services:
       - ./ivis-core/server/services:/opt/ivis-core/server/services
       - ./ivis-core/server/lib:/opt/ivis-core/server/lib
       - ./ivis-core/server/index.js:/opt/ivis-core/server/index.js
+      - ./ivis-core/server/app-builder.js:/opt/ivis-core/server/app-builder.js
       - ./ivis-core/client/src:/opt/ivis-core/client/src
       - ./ivis-core/files:/opt/ivis-core/server/files
     depends_on:

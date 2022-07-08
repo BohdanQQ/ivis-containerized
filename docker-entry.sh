@@ -7,6 +7,6 @@ set -e
 )
 
 # TODO: somehow wait for db and elasticsearch exactly
-sleep 10
+sleep 20
 
 cd /opt/ivis-core/server && npm-run-all --parallel watch:*

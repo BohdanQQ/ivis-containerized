@@ -1,0 +1,9 @@
+/data
+/config/ivis-cert/*pem
+/config/ivis-cert/*cnf
+/config/ivis-cert/*cert
+/config/ivis-cert/*crt
+/config/ivis-cert/*key
+/config/ivis-cert/*insecure
+/config/ivis-cert/*csr
+/config/ivis-cert/*srl

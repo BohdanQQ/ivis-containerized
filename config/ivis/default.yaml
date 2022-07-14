@@ -62,8 +62,8 @@ www:
   apiPort: 8082
   apiPortIsHttps: false
 
-  trustedUrlBase: http://localhost:8080
-  sandboxUrlBase: http://localhost:8081
+  trustedUrlBase: https://ivis.tapache:8443
+  sandboxUrlBase: https://ivis.tapache:8444
 
   # Secret for signing the session ID cookie
   secret: "`pwgen -1`"
@@ -73,7 +73,7 @@ www:
 
   # Is the server behind a proxy? true/false
   # Set this to true if you are serving IVIS as a virtual domain through Nginx or Apache
-  proxy: false
+  proxy: true
 
   # maximum POST body size
   postsize: 128MB
@@ -142,15 +142,16 @@ roles:
       - showAdminUsers
       - showAdminNamespaces
       - showAdminAlerts
+      - showAdminJobExecs
       rootNamespaceRole: master
 
   namespace:
     master:
       name: "Master"
       description: "All permissions"
-      permissions: ["view", "edit", "delete", "share", "createNamespace", "createTemplate", "createJob", "createTask", "createWorkspace", "createPanel", "createSignal", "createSignalSet", "manageUsers", "createAlert"]
+      permissions: ["view", "edit", "delete", "share", "createNamespace", "createTemplate", "createJob", "createTask", "createWorkspace", "createPanel", "createSignal", "createSignalSet", "manageUsers", "createAlert", "createExec"]
       children:
-        namespace: ["view", "edit", "delete", "share", "createNamespace", "createTemplate", "createJob", "createTask", "createWorkspace", "createPanel", "createSignal", "createSignalSet", "manageUsers", "createAlert"]
+        namespace: ["view", "edit", "delete", "share", "createNamespace", "createTemplate", "createJob", "createTask", "createWorkspace", "createPanel", "createSignal", "createSignalSet", "manageUsers", "createAlert", "createExec"]
         template: ["view", "edit", "delete", "share", "execute", "viewFiles", "manageFiles"]
         job: ["view", "edit", "delete", "share", "execute", "viewFiles", "manageFiles"]
         task: ["view", "edit", "delete", "share", "execute", "viewFiles", "manageFiles"]
@@ -159,6 +160,7 @@ roles:
         signal: ["view", "edit", "delete", "query", "share"]
         signalSet: ["view", "edit", "delete", "insertRecord", "editRecord", "deleteRecord", "query", "share", "reindex", "createSignal", "manageScripts"]
         alert: ["view", "edit", "delete", "share", "trigger"]
+        jobExecutor: ["view", "edit", "delete", "share"]
 
   template:
     master:
@@ -208,3 +210,9 @@ roles:
       name: "Master"
       description: "All permissions"
       permissions: ["view", "edit", "delete", "share", "trigger"]
+
+  jobExecutor:
+    master:
+      name: "Master"
+      description: "All permissions"
+      permissions: ["view", "edit", "delete", "share"]

@@ -100,7 +100,11 @@ certs:
     crl: certs/ca-crl.pem
     serverCert: certs/server-crt.pem
     serverKey: certs/server-key.pem
-
+  
+  remote:
+    cliCert: certs/remote/server.cert
+    cliKey: certs/remote/server.pem
+    CACert: certs/remote/ca/ca.pem
 
 log:
   # silly|verbose|info|http|warn|error|silent

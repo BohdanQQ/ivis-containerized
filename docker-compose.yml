@@ -8,6 +8,9 @@ services:
     volumes:
       - ./config/apache/apache.conf:/usr/local/apache2/conf/httpd.conf:ro
       - ./config/apache/vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf:ro
+      # assumes the certificates are generated locally first and copied into this location
+      # TODO
+      # should be changed to NEVER be required to be copied
       - ./config/ivis-cert/server.cert:/opt/server.cert.pem:ro
       - ./config/ivis-cert/server.pem:/opt/server.key.insecure:ro
       - ./config/ivis-cert/ca.cert:/opt/ca.cert.pem:ro
@@ -57,6 +60,8 @@ services:
       - ./config/ivis-cert/server.cert:/opt/server.cert.pem:ro
       - ./config/ivis-cert/server.pem:/opt/server.key.insecure:ro
       - ./config/ivis-cert/ca.cert:/opt/ca.cert.pem:ro
+      # assumes the certificates are generated locally first
+      - ./ivis-core/server/certs/remote:/opt/ivis-core/server/certs/remote
 
       # development files
       # fine-grained volume mapping so as to not collide with built packages from the dockerfile build

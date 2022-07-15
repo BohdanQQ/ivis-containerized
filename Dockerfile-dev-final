@@ -14,7 +14,7 @@ RUN yum install -y install \
     at-spi2-atk \
     gtk3 
 RUN npm install -g nodemon npm-run-all
-RUN yum install -y git python3 python3-pip
+RUN yum install -y git python3 python3-pip openssl
 RUN python3 -m pip install --user --upgrade setuptools wheel
 # ------------------------------------ rebuild modules
 

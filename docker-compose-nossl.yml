@@ -7,7 +7,7 @@ services:
     image: httpd:2.4.54
     volumes:
       - ./config/apache/apache.conf:/usr/local/apache2/conf/httpd.conf:ro
-      - ./config/apache/vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf:ro
+      - ./config/apache/http-only/vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf:ro
       # assumes the certificates are generated locally first and copied into this location
       # TODO
       # should be changed to NEVER be required to be copied
@@ -17,6 +17,7 @@ services:
     ports:
        - "8443:443"
        - "8446:8446"
+       # exposes non https port to the host
        - "80:80"
       #  - "8445:445"
     networks:
@@ -55,7 +56,7 @@ services:
       dockerfile: ./Dockerfile-dev-final
     volumes:
       # ivis configuration
-      - ./config/ivis:/opt/ivis-core/server/config:ro
+      - ./config/ivis/default-nossl.yaml:/opt/ivis-core/server/config/default.yaml:ro
       # TODO adjust paths
       # certificates (only for sending as client certificates and accepting locally-issued certificates)
       - ./config/ivis-cert/server.cert:/opt/server.cert.pem:ro

@@ -62,8 +62,8 @@ www:
   apiPort: 8082
   apiPortIsHttps: false
 
-  trustedUrlBase: https://ivis.tapache:8443
-  sandboxUrlBase: https://ivis.tapache:8444
+  trustedUrlBase: https://ivis.tapache:443
+  sandboxUrlBase: https://sbox.tapache:443
 
   # Secret for signing the session ID cookie
   secret: "`pwgen -1`"

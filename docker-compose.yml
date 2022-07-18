@@ -15,10 +15,9 @@ services:
       - ./config/ivis-cert/server.pem:/opt/server.key.insecure:ro
       - ./config/ivis-cert/ca.cert:/opt/ca.cert.pem:ro
     ports:
-       - "8443:443"
+       - "443:443"
        - "8446:8446"
        - "80:80"
-      #  - "8445:445"
     networks:
       ivis-net:
         aliases: 

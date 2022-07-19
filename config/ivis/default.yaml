@@ -56,7 +56,7 @@ www:
   host: 0.0.0.0
   # HTTP(S) port to listen on
   trustedPort: 8080
-  trustedPortIsHttps: false
+  trustedPortIsHttps: false # it is NOT - none of them are, the proxy takes care of that
   sandboxPort: 8081
   sandboxPortIsHttps: false
   apiPort: 8082
@@ -102,6 +102,7 @@ certs:
     serverKey: certs/server-key.pem
   
   remote:
+    # if generated according to readme, these should remain the same
     cliCert: certs/remote/server.cert
     cliKey: certs/remote/server.pem
     CACert: certs/remote/ca/ca.cert

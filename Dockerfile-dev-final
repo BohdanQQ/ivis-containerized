@@ -51,6 +51,6 @@ WORKDIR /opt/ivis-core/
 # note that server source code will get volume-mapped from the host
 # in order to be watched by nodemon
 COPY ./ivis-core ./
-COPY ./docker-entry.sh ./docker-entry.sh
+COPY ./docker-entry-dev.sh ./docker-entry.sh
 EXPOSE 8080 8081 8082
 ENTRYPOINT [ "bash", "/opt/ivis-core/docker-entry.sh" ]

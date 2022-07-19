@@ -23,6 +23,13 @@ services:
        - "8446:8446"
     # exposes HTTP->HTTPS redirect
        - "80:80"
+    networks:
+      ivis-net:
+        # network aliases for development purposes
+        # aliases: 
+        #  - ivis.tapache
+        #  - api.tapache
+        #  - sbox.tapache
     
 
   db:
@@ -35,18 +42,22 @@ services:
       MYSQL_ROOT_PASSWORD: alpha
     volumes:
       - ./data:/var/lib/mysql
+    networks:
+      ivis-net:
 
 
   es:
     container_name: es
     image: elasticsearch:6.8.23
+    networks:
+      ivis-net:
 
   ivis:
     container_name: IVIS-Core
     restart: always
     build:
       context: ./
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile-dev-final
     volumes:
       # ivis configuration, go ahead and edit the file, this entry does not need to be edited
       - ./config/ivis:/opt/ivis-core/server/config:ro
@@ -54,7 +65,16 @@ services:
       # certificate names can be configured in the ivis config
       - ./ivis-core/server/certs/remote:/opt/ivis-core/server/certs/remote
 
-      # persistence
+      # development files
+      # fine-grained volume mapping so as to not collide with built packages from the dockerfile build
+      - ./ivis-core/server/src:/opt/ivis-core/server/src
+      - ./ivis-core/server/routes:/opt/ivis-core/server/routes
+      - ./ivis-core/server/models:/opt/ivis-core/server/models
+      - ./ivis-core/server/services:/opt/ivis-core/server/services
+      - ./ivis-core/server/lib:/opt/ivis-core/server/lib
+      - ./ivis-core/server/index.js:/opt/ivis-core/server/index.js
+      - ./ivis-core/server/app-builder.js:/opt/ivis-core/server/app-builder.js
+      - ./ivis-core/client/src:/opt/ivis-core/client/src
       - ./ivis-core/files:/opt/ivis-core/server/files
 
     depends_on:
@@ -63,3 +83,34 @@ services:
       - tapache
       # still, there is a timeout in the docker-entry.sh script (sleep command) 
       # please edit the time to suit your machine's performance (reasonable time: 15-30s)
+    networks:
+      ivis-net:
+
+# development interfaces
+  # adminer:
+  #   image: adminer
+  #   container_name: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     ivis-net:
+
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana-oss:6.6.1
+  #   container_name: kibana
+  #   environment:
+  #     SERVER_NAME: localhost
+  #     ELASTICSEARCH_URL: http://es:9200
+  #   depends_on:
+  #     - es
+  #   ports:
+  #     - 5601:5601
+  #   networks:
+  #     ivis-net:
+networks:
+  ivis-net:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.80.0.0/16

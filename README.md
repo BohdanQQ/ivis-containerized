@@ -58,7 +58,7 @@ Generate certificates (still in `ivis-core` directory)
 
 `ivis`, `sbox` and `api` are the hosts you've created in the first step.
 
-Modify the `docker-compose-dev.yml` to properly mount all required certificates and set db password. Please note that both the Apache proxy and IVIS-core need the generated certififcates. Furthermore, modify `docker-compose-dev.yml`, `config/ivis/default.yaml` and `config/apache/vhosts.conf` (or even `apache.conf`) to configure the ports on which you want everything to listen and set proper `ServerName` values. Do not forget about the database password from `docker-compose.yml` when editing the IVIS-core config 
+Modify the `docker-compose-dev.yml` to properly mount all required certificates and set db password. Please note that both the Apache proxy and IVIS-core need the generated certififcates. Furthermore, modify `docker-compose-dev.yml`, `config/ivis/default.yaml` and `config/apache/vhosts.conf` (or even `apache.conf`) to configure the ports on which you want everything to listen and set proper `ServerName` values. Do not forget about the database password from `docker-compose-dev.yml` when editing the IVIS-core config 
 
 
 In addition to that, uncomment the `tapache.networks.aliases` section in `docker-compose-dev.yml` and set the aliases to the hosts you've created.
@@ -66,12 +66,12 @@ In addition to that, uncomment the `tapache.networks.aliases` section in `docker
 * **IMPORTANT**: to make this a truly local instance (in case you're exposed to the internet), replace all port exposition from `1234:5678` to (quoted!) `"127.0.0.1:1234:5678"`
 
 Please be careful when modifying the files. They should work out of the box with some minor adjustments (mainly due to domain name differences). As a rule of thumb:
-* data in `vhosts.conf` regards the **container network** (apart from the `ServerName` directives) and DNS names used in this file are drawn from the `docker-compose.yml` container names  
+* data in `vhosts.conf` regards the **container network** (apart from the `ServerName` directives) and DNS names used in this file are drawn from the `docker-compose-dev.yml` container names  
 * data in `default.yml` regards the **container network** (apart from the `trusted/sandboxUrlBase` entries)
 
 Finally,
 
-    docker compose up --build
+    docker compose -f ./docker-compose-dev.yml up --build
 
 
 To prevent client rebuilding when not needed, use just

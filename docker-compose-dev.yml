@@ -10,26 +10,26 @@ services:
       - ./config/apache/vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf:ro
       # assumes the certificates are generated locally first
       # here goes either the IVIS server certificate, or your official fullchain file
-      - /etc/letsencrypt/live/domain/fullchain.pem:/opt/server.pem:ro
+      - ./ivis-core/server/certs/remote/server.cert:/opt/server.pem:ro
       # here goes the key for the above certificate
-      - /etc/letsencrypt/live/domain/privkey.pem:/opt/server.key:ro
+      - ./ivis-core/server/certs/remote/server.pem:/opt/server.key:ro
       # here goes the local CA certificate as generated in ivis-core/certs/remote/ca folder
       - ./ivis-core/server/certs/remote/ca/ca.cert:/opt/ca.cert:ro
     ports:
     # exposes ivis, sbox and api endpoints
-       - "443:443"
+       - "127.0.0.1:443:443"
     # exposes SSL-secured elasticsearch
     # client connections to this port require a certificate from the local CA 
-       - "8446:8446"
+       - "127.0.0.1:8446:8446"
     # exposes HTTP->HTTPS redirect
-       - "80:80"
+       - "127.0.0.1:80:80"
     networks:
       ivis-net:
         # network aliases for development purposes
-        # aliases: 
-        #  - ivis.tapache
-        #  - api.tapache
-        #  - sbox.tapache
+        aliases: 
+         - ivis.local
+         - sbox.local
+         - api.local
     
 
   db:

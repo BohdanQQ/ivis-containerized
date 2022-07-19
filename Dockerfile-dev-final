@@ -52,5 +52,6 @@ WORKDIR /opt/ivis-core/
 # in order to be watched by nodemon
 COPY ./ivis-core ./
 COPY ./docker-entry-dev.sh ./docker-entry.sh
+COPY ./wait-for-it.sh ./wait-for-it.sh
 EXPOSE 8080 8081 8082
 ENTRYPOINT [ "bash", "/opt/ivis-core/docker-entry.sh" ]

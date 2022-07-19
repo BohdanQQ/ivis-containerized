@@ -8,22 +8,28 @@ services:
     volumes:
       - ./config/apache/apache.conf:/usr/local/apache2/conf/httpd.conf:ro
       - ./config/apache/vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf:ro
-      # assumes the certificates are generated locally first and copied into this location
-      # TODO
-      # should be changed to NEVER be required to be copied
-      - ./config/ivis-cert/server.cert:/opt/server.cert.pem:ro
-      - ./config/ivis-cert/server.pem:/opt/server.key.insecure:ro
-      - ./config/ivis-cert/ca.cert:/opt/ca.cert.pem:ro
+      # assumes the certificates are generated locally first
+      # here goes either the IVIS server certificate, or your official fullchain file
+      - /etc/letsencrypt/live/domain/fullchain.pem:/opt/server.pem:ro
+      # here goes the key for the above certificate
+      - /etc/letsencrypt/live/domain/privkey.pem:/opt/server.key:ro
+      # here goes the local CA certificate as generated in ivis-core/certs/remote/ca folder
+      - ./ivis-core/server/certs/remote/ca/ca.cert:/opt/ca.cert:ro
     ports:
+    # exposes ivis, sbox and api endpoints
        - "443:443"
+    # exposes SSL-secured elasticsearch
+    # client connections to this port require a certificate from the local CA 
        - "8446:8446"
+    # exposes HTTP->HTTPS redirect
        - "80:80"
     networks:
       ivis-net:
-        aliases: 
-         - ivis.tapache
-         - api.tapache
-         - sbox.tapache
+        # network aliases for development purposes
+        # aliases: 
+        #  - ivis.tapache
+        #  - api.tapache
+        #  - sbox.tapache
     
 
   db:
@@ -53,14 +59,10 @@ services:
       context: ./
       dockerfile: ./Dockerfile-dev-final
     volumes:
-      # ivis configuration
+      # ivis configuration, go ahead and edit the file, this entry does not need to be edited
       - ./config/ivis:/opt/ivis-core/server/config:ro
-      # TODO adjust paths
-      # certificates (only for sending as client certificates and accepting locally-issued certificates)
-      - ./config/ivis-cert/server.cert:/opt/server.cert.pem:ro
-      - ./config/ivis-cert/server.pem:/opt/server.key.insecure:ro
-      - ./config/ivis-cert/ca.cert:/opt/ca.cert.pem:ro
       # assumes the certificates are generated locally first
+      # certificate names can be configured in the ivis config
       - ./ivis-core/server/certs/remote:/opt/ivis-core/server/certs/remote
 
       # development files
@@ -79,31 +81,33 @@ services:
       - db
       - es
       - tapache
+      # still, there is a timeout in the docker-entry.sh script (sleep command) 
+      # please edit the time to suit your machine's performance (reasonable time: 15-30s)
     networks:
       ivis-net:
 
 # development interfaces
-  adminer:
-    image: adminer
-    container_name: adminer
-    restart: always
-    ports:
-      - 8080:8080
-    networks:
-      ivis-net:
+  # adminer:
+  #   image: adminer
+  #   container_name: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     ivis-net:
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana-oss:6.6.1
-    container_name: kibana
-    environment:
-      SERVER_NAME: localhost
-      ELASTICSEARCH_URL: http://es:9200
-    depends_on:
-      - es
-    ports:
-      - 5601:5601
-    networks:
-      ivis-net:
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana-oss:6.6.1
+  #   container_name: kibana
+  #   environment:
+  #     SERVER_NAME: localhost
+  #     ELASTICSEARCH_URL: http://es:9200
+  #   depends_on:
+  #     - es
+  #   ports:
+  #     - 5601:5601
+  #   networks:
+  #     ivis-net:
 networks:
   ivis-net:
     driver: bridge

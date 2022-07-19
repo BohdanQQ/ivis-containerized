@@ -104,7 +104,7 @@ certs:
   remote:
     cliCert: certs/remote/server.cert
     cliKey: certs/remote/server.pem
-    CACert: certs/remote/ca/ca.pem
+    CACert: certs/remote/ca/ca.cert
 
 log:
   # silly|verbose|info|http|warn|error|silent

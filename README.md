@@ -74,7 +74,7 @@ Finally,
 
 To prevent client rebuilding when not needed, use just
 
-    docker compose up
+    docker compose -f ./docker-compose-dev.yml up
 On the other hand, to force a rebuild, use the `--build` switch.
 
 To rebuild the IVIS python package, the IVIS container must be restarted as the package build is part of the entrypoint script.

@@ -57,7 +57,7 @@ services:
     restart: always
     build:
       context: ./
-      dockerfile: ./Dockerfile-dev-final
+      dockerfile: ./Dockerfile-dev
     volumes:
       # ivis configuration, go ahead and edit the file, this entry does not need to be edited
       - ./config/ivis:/opt/ivis-core/server/config:ro
@@ -81,8 +81,6 @@ services:
       - db
       - es
       - tapache
-      # still, there is a timeout in the docker-entry.sh script (sleep command) 
-      # please edit the time to suit your machine's performance (reasonable time: 15-30s)
     networks:
       ivis-net:
 

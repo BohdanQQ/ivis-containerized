@@ -61,5 +61,3 @@ services:
       - db
       - es
       - tapache
-      # still, there is a timeout in the docker-entry.sh script (sleep command) 
-      # please edit the time to suit your machine's performance (reasonable time: 15-30s)

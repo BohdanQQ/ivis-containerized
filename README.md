@@ -64,7 +64,7 @@ In addition to that, uncomment the `tapache.networks.aliases` section in `docker
 * **IMPORTANT**: to make this a truly local instance (in case you're exposed to the internet), replace all port exposure from `1234:5678` to (quoted!) `"127.0.0.1:1234:5678"`
 
 Please be careful when modifying the files. They should work out of the box with some minor adjustments (mainly due to domain name differences). As a rule of thumb:
-* data in `vhosts.conf` regards the **container network** (apart from the `ServerName` directives) and DNS names used in this file are drawn from the `docker-compose.yml` container names  
+* data in `vhosts.conf` regards the **container network** (apart from the `ServerName` directives) and DNS names used in this file are drawn from the `docker-compose-dev.yml` container names  
 * data in `default.yml` regards the **container network** (apart from the `trusted/sandboxUrlBase` entries)
 
 Finally,

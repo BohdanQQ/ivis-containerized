@@ -64,6 +64,11 @@ services:
       # assumes the certificates are generated locally first
       # certificate names can be configured in the ivis config
       - ./ivis-core/server/certs/remote:/opt/ivis-core/server/certs/remote
+      
+      # copy the OCI config file here, use the /opt/oci_key as the key_file 
+      - ./config/config.txt:/opt/oci_config
+      # insert the location to the OCI-associated private key
+      - ./config/key.txt:/opt/oci_key
 
       # development files
       # fine-grained volume mapping so as to not collide with built packages from the dockerfile build

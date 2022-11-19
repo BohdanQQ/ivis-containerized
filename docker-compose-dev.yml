@@ -70,6 +70,10 @@ services:
       # insert the location to the OCI-associated private key
       - ./config/key.txt:/opt/oci_key
 
+      # bind valid SSH key pair
+      - ./config/pub.txt:/opt/ssh_pub
+      - ./config/key.txt:/opt/ssh_prv
+
       # development files
       # fine-grained volume mapping so as to not collide with built packages from the dockerfile build
       - ./ivis-core/server/src:/opt/ivis-core/server/src

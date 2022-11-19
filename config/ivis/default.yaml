@@ -49,6 +49,13 @@ oci:
   tenancyId: null
   credsPath: /opt/oci_config
 
+# expected ssh key pair used for SSH communication originating from 
+# this IVIS-core instace
+ssh:
+  publicPath:  /opt/ssh_pub
+  privatePath: /opt/ssh_prv
+
+
 mysql:
   host: db
   user: ivis-core

@@ -71,8 +71,8 @@ services:
       - ./config/key.txt:/opt/oci_key
 
       # bind valid SSH key pair
-      - ./config/pub.txt:/opt/ssh_pub
-      - ./config/key.txt:/opt/ssh_prv
+      # WARNING!!! use `ssh-keygen -t ecdsa`, DO NOT USE THE DEFAULT TYPE
+      #   - due to ssh2 package compatibility...
 
       # development files
       # fine-grained volume mapping so as to not collide with built packages from the dockerfile build

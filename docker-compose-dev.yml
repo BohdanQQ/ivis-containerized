@@ -73,6 +73,8 @@ services:
       # bind valid SSH key pair
       # WARNING!!! use `ssh-keygen -t ecdsa`, DO NOT USE THE DEFAULT TYPE
       #   - due to ssh2 package compatibility...
+      - ./config/ecd.pub:/opt/ssh_pub
+      - ./config/ecd:/opt/ssh_prv
 
       # development files
       # fine-grained volume mapping so as to not collide with built packages from the dockerfile build

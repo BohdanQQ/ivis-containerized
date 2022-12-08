@@ -7,6 +7,24 @@ Creates a containerized environment for an IVIS-core instance:
 * IVIS-core instance configured to use the other containers
 * all behind an HTTP(S) Apache proxy
 
+## Preparation
+
+### Elasticsearch container support
+
+* on Windows run:
+
+```
+wsl -d docker-desktop
+docker-desktop-wsl-prompt > run sysctl -w vm.max_map_count=262144
+docker-desktop-wsl-prompt > exit
+```
+
+* on Linux run:
+
+```
+run sysctl -w vm.max_map_count=262144
+```
+
 ## Full setup - trusted certificates
 
 Clone your IVIS repo

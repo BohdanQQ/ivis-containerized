@@ -25,6 +25,28 @@ docker-desktop-wsl-prompt > exit
 run sysctl -w vm.max_map_count=262144
 ```
 
+### Oracle Cloud Infrastructure support
+
+1. Navigate to your Account in the OCI Console
+
+2. API keys -> Add API Key
+
+3. Generate Key pair, download both key files
+
+4. Copy configuration file preview into `config/config.txt`
+
+5. Set the `key_file` entry to `/opt/oci_key`
+
+6. Copy private key file into `config/key.txt`
+
+7. Click on the Oracle Cloud Console Menu
+
+8. Identity & Security -> Compartment -> select your compartment
+
+9. Copy OCID of your compartment into the `config/ivis/default.yaml` `compartmentId` key
+
+10. Copy tenancy ID from the configuration file preview or `config/config.txt` into `config/ivis/default.yaml` `tenancyId` key
+
 ## Full setup - trusted certificates
 
 Clone your IVIS repo
@@ -32,6 +54,19 @@ Clone your IVIS repo
     git clone <YOUR_IVIS_REPO>
     cd ivis-core
     git checkout <YOUR_IVIS_BRANCH>
+
+
+Generate SSH key pair for remote executor communication
+
+**INSIDE the `ivis-containerized` REPO ROOT:**
+    
+    ./remote-exec-ssh-init.sh
+
+If you'd like to supply your own certificates:
+
+1. The keypair MUST be of ECDSA type
+    * due to `ssh2` package compatibility
+2. You must manually alter the `docker-compose` mounts for the `/opt/ssh_pub` and `/opt/ssh_priv` files
 
 Note that not every branch / fork might be compatible with the following!
 
@@ -56,6 +91,8 @@ Finally,
 The IVIS-Core container will time out several times before actually running with error ` wait-for-it.sh: timeout occurred after ...`. Just wait until the elasticsearch/database container is ready to make connections and IVIS-core will start.
 
 ## Local setup - suitable only for a docker network, development
+
+WARNING: due to implementation details, this setup does not support Oracle Cloud Infrastructure extension
 
 Modify your `/etc/hosts` file (or Windows equivalent) to include three new hosts (for example: `ivis.apache`, `sbox.apache`, `api.apache`) and map them onto the loopback (`127.0.0.1`).
 

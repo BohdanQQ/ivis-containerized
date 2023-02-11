@@ -70,9 +70,10 @@ services:
       # insert the location to the OCI-associated private key
       - ./config/key.txt:/opt/oci_key
 
-      # bind valid SSH key pair
+      # bind valid SSH key pair (use remote-exec-ssh-init.sh to skip setting this up on your own)
       # WARNING!!! use `ssh-keygen -t ecdsa`, DO NOT USE THE DEFAULT TYPE
       #   - due to ssh2 package compatibility...
+      # used for remote-executor communication
       - ./config/ecd.pub:/opt/ssh_pub
       - ./config/ecd:/opt/ssh_prv
 

@@ -47,6 +47,8 @@ To supply your own certificates:
 
 ### Oracle Cloud Infrastructure support
 
+Paths are relative to the `ivis-containerized` repo root!
+
 1. Navigate to your Account in the OCI Console
 
 2. API keys -> Add API Key

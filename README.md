@@ -25,6 +25,26 @@ docker-desktop-wsl-prompt > exit
 run sysctl -w vm.max_map_count=262144
 ```
 
+### SSH key pair setup
+
+Generate SSH key pair for remote executor communication
+    
+    ./remote-exec-ssh-init.sh
+
+
+To supply your own certificates:
+
+1. The keypair MUST be of ECDSA type
+    * due to `ssh2` package compatibility
+2. You must manually alter the `docker-compose` mounts for the `/opt/ssh_pub` and `/opt/ssh_priv` files
+
+### Clone IVIS-core repo
+
+    git clone <YOUR_IVIS_REPO>
+    cd ivis-core
+    git checkout <YOUR_IVIS_BRANCH>
+
+
 ### Oracle Cloud Infrastructure support
 
 1. Navigate to your Account in the OCI Console
@@ -49,28 +69,9 @@ run sysctl -w vm.max_map_count=262144
 
 ## Full setup - trusted certificates
 
-Clone your IVIS repo
+Note that not every IVIS-core branch / fork might be compatible with the following!
 
-    git clone <YOUR_IVIS_REPO>
-    cd ivis-core
-    git checkout <YOUR_IVIS_BRANCH>
-
-
-Generate SSH key pair for remote executor communication
-
-**INSIDE the `ivis-containerized` REPO ROOT:**
-    
-    ./remote-exec-ssh-init.sh
-
-If you'd like to supply your own certificates:
-
-1. The keypair MUST be of ECDSA type
-    * due to `ssh2` package compatibility
-2. You must manually alter the `docker-compose` mounts for the `/opt/ssh_pub` and `/opt/ssh_priv` files
-
-Note that not every branch / fork might be compatible with the following!
-
-Generate certificates (still in `ivis-core` directory)
+Generate certificates (in the `ivis-core` directory)
 
     cd ./server/certs/remote/
     ./init.sh
@@ -96,15 +97,9 @@ WARNING: due to implementation details, this setup does not support Oracle Cloud
 
 Modify your `/etc/hosts` file (or Windows equivalent) to include three new hosts (for example: `ivis.apache`, `sbox.apache`, `api.apache`) and map them onto the loopback (`127.0.0.1`).
 
-Clone your IVIS repo
+Note that not every IVIS-core branch / fork might be compatible with the following!
 
-    git clone <YOUR_IVIS_REPO>
-    cd ivis-core
-    git checkout <YOUR_IVIS_BRANCH>
-
-Note that not every branch / fork might be compatible with the following!
-
-Generate certificates (still in `ivis-core` directory)
+Generate certificates (in the `ivis-core` directory)
 
     cd ./server/certs/remote/
     ./init.sh

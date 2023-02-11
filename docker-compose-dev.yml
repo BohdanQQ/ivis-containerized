@@ -27,9 +27,9 @@ services:
       ivis-net:
         # network aliases for development purposes
         aliases: 
-         - ivis.local
-         - sbox.local
-         - api.local
+         - ivis.apache
+         - sbox.apache
+         - api.apache
     
 
   db:

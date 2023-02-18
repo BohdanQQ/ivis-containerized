@@ -9,6 +9,11 @@ Creates a containerized environment for an IVIS-core instance:
 
 ## Preparation
 
+### Prerequisite software
+
+* Docker, Docker Compose
+* `ssh-keygen`
+
 ### Elasticsearch container support
 
 * on Windows run:
@@ -71,6 +76,8 @@ Paths are relative to the `ivis-containerized` repo root!
 
 ## Full setup - trusted certificates
 
+Pick and register 3 domain names (`ivis.domain.com`, `sbox.domain.com`, `api.domain.com`) for the trusted, sandbox and API endpoints. Create a single SSL/TLS certificate for all of the domain names and note the location of the full chain and private key files.
+
 Note that not every IVIS-core branch / fork might be compatible with the following!
 
 Generate certificates (in the `ivis-core` directory)
@@ -81,11 +88,24 @@ Generate certificates (in the `ivis-core` directory)
 
 `ivis`, `sbox` and `api` are the registered A/CNAME DNS records for the trusted, sandbox and api endpoints respectively.
 
-Modify the `docker-compose.yml` to properly mount all required certificates. Please note that both the Apache proxy and IVIS-core need the generated certififcates. Furthermore, modify `docker-compose.yml`, `config/ivis/default.yaml` and `config/apache/vhosts.conf` (or even `apache.conf`) to configure the ports on which you want everything to listen and set proper `ServerName`, `trusted/sandboxUrlBase` values. Do not forget about the database password from `docker-compose.yml` and the secret used for session signing when editing the IVIS-core config. 
+### Basic setup
+
+In the `docker-compose.yml` file, modify the `proxy` container's **environment vairables to the registered domain names** as well as the **certificate mount locations**. Also modify the **database password**.
+
+In the `config/ivis/default.yaml` file, modify `trustedUrlBase`, `sandboxUrlBase` and `remoteElasticsearchBase` to use your registered domain names (just like in `proxy`'s environment variables).
+Furthermore, update the `mysql.password` key to the password used in the `db` container's configuration. Finally, change the `www.secret`.
+
+### Advanced setup
+
+(only if you generated cetificates elsewhere)
+
+Modify the `docker-compose.yml` to properly mount all required certificates (cross check the generation scripts and the docker compose file). Please note that both the Apache proxy and IVIS-core need the generated certififcates. Furthermore, modify `docker-compose.yml`, `config/ivis/default.yaml` and `config/apache/vhosts.conf` (or even `apache.conf`) to configure the ports on which you want everything to listen and set proper `ServerName`, `trusted/sandboxUrlBase` values. Do not forget about the database password from `docker-compose.yml` and the secret used for session signing when editing the IVIS-core config. 
 
 Please be careful when modifying the files. They should work out of the box with some minor adjustments (mainly due to domain name differences). As a rule of thumb:
 * data in `vhosts.conf` regards the **container network** (apart from the `ServerName` directives) and DNS names used in this file are drawn from the `docker-compose.yml` container names  
 * data in `default.yml` regards the **container network** (apart from the `trusted/sandboxUrlBase` entries)
+
+### Start
 
 Finally,
 
@@ -93,11 +113,11 @@ Finally,
 
 The IVIS-Core container will time out several times before actually running with error ` wait-for-it.sh: timeout occurred after ...`. Just wait until the elasticsearch/database container is ready to make connections and IVIS-core will start.
 
-## Local setup - suitable only for a docker network, development
+## (UNSTABLE / OUTDATED) Local setup - suitable only for a docker network, development
 
 WARNING: due to implementation details, this setup does not support Oracle Cloud Infrastructure extension
 
-Modify your `/etc/hosts` file (or Windows equivalent) to include three new hosts (for example: `ivis.apache`, `sbox.apache`, `api.apache`) and map them onto the loopback (`127.0.0.1`).
+Modify your `/etc/hosts` file (or Windows equivalent - `C:\Windows\System32\drivers\etc\hosts`) to include three new hosts (for example: `ivis.apache`, `sbox.apache`, `api.apache`) and map them onto the loopback (`127.0.0.1`).
 
 Note that not every IVIS-core branch / fork might be compatible with the following!
 
@@ -108,6 +128,9 @@ Generate certificates (in the `ivis-core` directory)
     ./server_cert_gen.sh server <ivis> <sbox> <api>
 
 `ivis`, `sbox` and `api` are the hosts you've created in the first step.
+ 
+
+OUTDATED NOTICE: environment variables should work with the setup, though it hasn't been tested
 
 Modify the `docker-compose-dev.yml` to properly mount all required certificates and set db password. Please note that both the Apache proxy and IVIS-core need the generated certififcates. Furthermore, modify `docker-compose-dev.yml`, `config/ivis/default.yaml` and `config/apache/vhosts.conf` (or even `apache.conf`) to configure the ports on which you want everything to listen and set proper `ServerName`, `trusted/sandboxUrlBase` values. Do not forget about the database password from `docker-compose.yml` and the secret used for session signing when editing the IVIS-core config. 
 

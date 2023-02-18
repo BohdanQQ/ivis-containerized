@@ -15,6 +15,18 @@ services:
       - ./ivis-core/server/certs/remote/server.pem:/opt/server.key:ro
       # here goes the local CA certificate as generated in ivis-core/certs/remote/ca folder
       - ./ivis-core/server/certs/remote/ca/ca.cert:/opt/ca.cert:ro
+    environment:
+      # values below should be identical to ivis/default.yaml:trusted, sbox, api, es URL configuration
+      # change to your domains according to your certificate
+        IVIS_DOMAIN: ivis.apache
+        API_DOMAIN: api.apache
+        SBOX_DOMAIN: sbox.apache
+        IVIS_ES_DOMAIN: ivis.apache
+      # no real need to change these...
+        IVIS_PUBLIC_PORT: 443
+        SBOX_PUBLIC_PORT: 443
+        API_PUBLIC_PORT: 443
+        IVIS_ES_PUBLIC_PORT: 8446
     ports:
     # exposes ivis, sbox and api endpoints
        - "127.0.0.1:443:443"

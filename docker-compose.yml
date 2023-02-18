@@ -8,6 +8,9 @@ services:
     volumes:
       - ./config/apache/apache.conf:/usr/local/apache2/conf/httpd.conf:ro
       - ./config/apache/vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf:ro
+      # change mount to the location of your certificate
+      #   - certificate is expected to be registered for trusted, sandbox, api and elasticsearch domains... 
+      #     see "environment" sections for an example of domain config
       # assumes the certificates are generated locally first
       # here goes either the IVIS server certificate, or your official fullchain file
       - /etc/letsencrypt/live/domain/fullchain.pem:/opt/server.pem:ro
@@ -15,6 +18,18 @@ services:
       - /etc/letsencrypt/live/domain/privkey.pem:/opt/server.key:ro
       # here goes the local CA certificate as generated in ivis-core/certs/remote/ca folder
       - ./ivis-core/server/certs/remote/ca/ca.cert:/opt/ca.cert:ro
+    environment:
+      # values below should be identical to ivis/default.yaml:trusted, sbox, api, es URL configuration
+      # change to your domains according to your certificate
+        IVIS_DOMAIN: ivis.apache
+        API_DOMAIN: api.apache
+        SBOX_DOMAIN: sbox.apache
+        IVIS_ES_DOMAIN: ivis.apache
+      # no real need to change these...
+        IVIS_PUBLIC_PORT: 443
+        SBOX_PUBLIC_PORT: 443
+        API_PUBLIC_PORT: 443
+        IVIS_ES_PUBLIC_PORT: 8446
     ports:
     # exposes ivis, sbox and api endpoints
        - "443:443"
@@ -30,6 +45,7 @@ services:
     image: mysql:5.7
     environment:
       MYSQL_USER: ivis-core
+      # change this, reflect in config/ivis/default.yaml
       MYSQL_PASSWORD: example
       MYSQL_DATABASE: ivis-core
       MYSQL_ROOT_PASSWORD: alpha
@@ -48,6 +64,7 @@ services:
       context: ./
       dockerfile: ./Dockerfile
     volumes:
+      # no real need to change these
       # ivis configuration, go ahead and edit the file, this entry does not need to be edited
       - ./config/ivis:/opt/ivis-core/server/config:ro
       # assumes the certificates are generated locally first

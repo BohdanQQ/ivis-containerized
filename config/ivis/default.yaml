@@ -54,17 +54,18 @@ oci:
   tenancyId: null
   credsPath: /opt/oci_config
 # repositories and commits of the jobs scheduling and running software on pool peers 
+# without a "commit" hash specified, master HEAD is used
   peerRJRRepo:
     url: https://github.com/BohdanQQ/ivis-remote-job-runner.git
-    commit: e710f800bf7b9fe3c7e1c2b671bbd09466b92ffe
+    # commit: full hash here
   peerRPSRepo:
     url: https://github.com/BohdanQQ/ivis-remote-pool-scheduler
-    commit: 0c677cd4d8b3a1e59380446b84b9f2a588f2a02a
+    # commit: full hash here
 
 slurm:
   utilsRepo:
     url: https://github.com/BohdanQQ/ivis-isolated-runner-utils
-    commit: ea7d0535dfbb339e1e101a3bc1a527c466f538f1
+    # commit: full hash here
 
 # expected ssh key pair used for SSH communication originating from 
 # this IVIS-core instace
@@ -77,6 +78,7 @@ mysql:
   host: db
   user: ivis-core
   database: ivis-core
+  # same as "db" container password
   password: example
   port: 3306
   charset: utf8mb4
@@ -93,12 +95,15 @@ www:
   apiPort: 8082
   apiPortIsHttps: false
 
+  # be sure to edit this, should be identical with 
+  # the "proxy" container's enviroment variables 
   trustedUrlBase: https://ivis.apache:443
   sandboxUrlBase: https://sbox.apache:443
   remoteElasticsearchBase: https://ivis.apache:8446
 
+  # CHANGE THIS!
   # Secret for signing the session ID cookie
-  secret: "`pwgen -1`"
+  secret: "qwertyuiop123"
 
   # Session length in seconds when "remember me" is checked
   remember: 2592000 # 30 days

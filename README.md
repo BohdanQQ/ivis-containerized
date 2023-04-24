@@ -20,7 +20,7 @@ Creates a containerized environment for an IVIS-core instance:
 
 ```
 wsl -d docker-desktop
-docker-desktop-wsl-prompt > run sysctl -w vm.max_map_count=262144
+docker-desktop-wsl-prompt > sysctl -w vm.max_map_count=262144
 docker-desktop-wsl-prompt > exit
 ```
 

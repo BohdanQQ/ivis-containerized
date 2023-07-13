@@ -42,10 +42,43 @@ SMS:
   secretKey:
   region:
 
+oci:
+# true if IVIS-core uses a SSL certificate backed by the chain of trust
+# false if IVIS-core uses a locally-issued certificate
+  ivisSSLCertVerifiableViaRootCAs: true
+# seconds to wait for an instance to become reachable via SSH (after creation. provisioning)
+  instanceWaitSecs: 180
+# FILL IN BEFORE USE !!! or leave empty, if you do not want to use it
+# using Oracle Cloud Infrastructure for distributed job execution
+  compartmentId: null
+  tenancyId: null
+  credsPath: /opt/oci_config
+# repositories and commits of the jobs scheduling and running software on pool peers 
+# without a "commit" hash specified, master HEAD is used
+  peerRJRRepo:
+    url: https://github.com/BohdanQQ/ivis-remote-job-runner.git
+    # commit: full hash here
+  peerRPSRepo:
+    url: https://github.com/BohdanQQ/ivis-remote-pool-scheduler
+    # commit: full hash here
+
+slurm:
+  utilsRepo:
+    url: https://github.com/BohdanQQ/ivis-isolated-runner-utils
+    # commit: full hash here
+
+# expected ssh key pair used for SSH communication originating from 
+# this IVIS-core instace
+ssh:
+  publicPath:  /opt/ssh_pub
+  privatePath: /opt/ssh_prv
+
+
 mysql:
   host: db
   user: ivis-core
   database: ivis-core
+  # same as "db" container password
   password: example
   port: 3306
   charset: utf8mb4
@@ -62,11 +95,15 @@ www:
   apiPort: 8082
   apiPortIsHttps: false
 
-  trustedUrlBase: https://ivis.tapache:443
-  sandboxUrlBase: https://sbox.tapache:443
+  # be sure to edit this, should be identical with 
+  # the "proxy" container's enviroment variables 
+  trustedUrlBase: https://ivis.apache:443
+  sandboxUrlBase: https://sbox.apache:443
+  remoteElasticsearchBase: https://ivis.apache:8446
 
+  # CHANGE THIS!
   # Secret for signing the session ID cookie
-  secret: "`pwgen -1`"
+  secret: "qwertyuiop123"
 
   # Session length in seconds when "remember me" is checked
   remember: 2592000 # 30 days
@@ -154,9 +191,9 @@ roles:
     master:
       name: "Master"
       description: "All permissions"
-      permissions: ["view", "edit", "delete", "share", "createNamespace", "createTemplate", "createJob", "createTask", "createWorkspace", "createPanel", "createSignal", "createSignalSet", "manageUsers", "createAlert", "createExec", "viewCerts"]
+      permissions: ["view", "edit", "delete", "share", "createNamespace", "createTemplate", "createJob", "createTask", "createWorkspace", "createPanel", "createSignal", "createSignalSet", "manageUsers", "createAlert", "createExec", "viewCerts", "manageGlobalExecState"]
       children:
-        namespace: ["view", "edit", "delete", "share", "createNamespace", "createTemplate", "createJob", "createTask", "createWorkspace", "createPanel", "createSignal", "createSignalSet", "manageUsers", "createAlert", "createExec"]
+        namespace: ["view", "edit", "delete", "share", "createNamespace", "createTemplate", "createJob", "createTask", "createWorkspace", "createPanel", "createSignal", "createSignalSet", "manageUsers", "createAlert", "createExec", "manageGlobalExecState"]
         template: ["view", "edit", "delete", "share", "execute", "viewFiles", "manageFiles"]
         job: ["view", "edit", "delete", "share", "execute", "viewFiles", "manageFiles"]
         task: ["view", "edit", "delete", "share", "execute", "viewFiles", "manageFiles"]

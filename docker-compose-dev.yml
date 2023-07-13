@@ -15,6 +15,18 @@ services:
       - ./ivis-core/server/certs/remote/server.pem:/opt/server.key:ro
       # here goes the local CA certificate as generated in ivis-core/certs/remote/ca folder
       - ./ivis-core/server/certs/remote/ca/ca.cert:/opt/ca.cert:ro
+    environment:
+      # values below should be identical to ivis/default.yaml:trusted, sbox, api, es URL configuration
+      # change to your domains according to your certificate
+        IVIS_DOMAIN: ivis.apache
+        API_DOMAIN: api.apache
+        SBOX_DOMAIN: sbox.apache
+        IVIS_ES_DOMAIN: ivis.apache
+      # no real need to change these...
+        IVIS_PUBLIC_PORT: 443
+        SBOX_PUBLIC_PORT: 443
+        API_PUBLIC_PORT: 443
+        IVIS_ES_PUBLIC_PORT: 8446
     ports:
     # exposes ivis, sbox and api endpoints
        - "127.0.0.1:443:443"
@@ -27,9 +39,9 @@ services:
       ivis-net:
         # network aliases for development purposes
         aliases: 
-         - ivis.local
-         - sbox.local
-         - api.local
+         - ivis.apache
+         - sbox.apache
+         - api.apache
     
 
   db:
@@ -64,6 +76,18 @@ services:
       # assumes the certificates are generated locally first
       # certificate names can be configured in the ivis config
       - ./ivis-core/server/certs/remote:/opt/ivis-core/server/certs/remote
+      
+      # copy the OCI config file here, use the /opt/oci_key as the key_file 
+      - ./config/config.txt:/opt/oci_config
+      # insert the location to the OCI-associated private key
+      - ./config/key.txt:/opt/oci_key
+
+      # bind valid SSH key pair (use remote-exec-ssh-init.sh to skip setting this up on your own)
+      # WARNING!!! use `ssh-keygen -t ecdsa`, DO NOT USE THE DEFAULT TYPE
+      #   - due to ssh2 package compatibility...
+      # used for remote-executor communication
+      - ./config/ecd.pub:/opt/ssh_pub
+      - ./config/ecd:/opt/ssh_prv
 
       # development files
       # fine-grained volume mapping so as to not collide with built packages from the dockerfile build

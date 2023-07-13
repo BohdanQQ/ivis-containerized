@@ -2,7 +2,7 @@ FROM centos:7
 WORKDIR /opt
 RUN yum update -y
 RUN yum install -y epel-release
-RUN curl --silent --location https://rpm.nodesource.com/setup_10.x | bash -
+RUN curl --silent --location https://rpm.nodesource.com/setup_14.x | bash -
 RUN yum install -y install \
     nodejs \
     #redis \
